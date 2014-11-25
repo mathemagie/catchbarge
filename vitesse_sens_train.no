@@ -1,0 +1,58 @@
+String readString;
+#include <Servo.h> 
+#include <SPI.h>
+#include <Ethernet.h>
+#include <PusherClient.h>
+
+Servo myservoa;  // create servo object to control a servo 
+
+byte mac[] = { 0xDE, 0xAD, 0xEF, 0xFE, 0xED,0xBE };
+PusherClient client;
+
+String val;
+
+int vitesse_train;
+
+void setup() {
+   Serial.begin(9600);
+   if (Ethernet.begin(mac) == 0) {
+    Serial.println("Init Ethernet failed");
+    for(;;)
+      ;
+  }
+  delay(1000);
+  myservoa.attach(8);  //set vitesse train
+  myservoa.write(90);
+  Serial.println("train web interface setup"); // so I can keep track of what is loaded
+   if(client.connect("848c05ddb5587c84c6d1")) {
+     client.bind("vitesse_train", set_vitesse_train);
+     //client.bind("toogle_sens_train", set_sens_train);
+     //client.bind("change_sens_train", change_sens_train);
+     client.subscribe("train_channel");
+     Serial.println("bind process");
+  }
+  else {
+    while(1) {}
+  }
+}
+
+
+void loop() {
+   if (client.connected()) {
+    client.monitor();
+  
+  }
+  else {
+    myservoa.write(90);
+ }
+   
+}
+
+void set_vitesse_train(String data) {
+  Serial.println(data);
+  val = data.substring(data.indexOf('data') + 15,data.indexOf('zz'));
+  Serial.println(val);
+  myservoa.write(val.toInt());
+  vitesse_train = val.toInt();
+  // Serial.println("vitesse train =>" + vitesse_train);
+}
