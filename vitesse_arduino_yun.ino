@@ -31,6 +31,8 @@ void loop() {
   if (res != tmpVal) {
     Serial.println(res);
      myservo.write(res.toInt());
+     delay(100);
+     myservo.write(res.toInt() + 2);
     
   }
   tmpVal = res;
