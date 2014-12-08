@@ -4,7 +4,7 @@
 
 int val;
 
-char tmpVal;
+String tmpVal;
 
 Servo myservoa, myservob;
 
@@ -30,21 +30,21 @@ void loop() {
     
   }
   Serial.println(c);
- 
-  if (c == '1') {
-     Serial.println('valeur  1 from get ');
-    myservoa.write(95);
-    myservob.write(95);
-    
-  }
-  if (c == '0') {
-     Serial.println('valeur  0 from get');
-     myservoa.write(0);
-     myservob.write(0);
-    
-  }
-  
- // tmpVal = res;
+ if (res != tmpVal) {
+    if (c == '1') {
+       Serial.println('valeur  1 from get ');
+      myservoa.write(95);
+      myservob.write(95);
+      
+    }
+    if (c == '0') {
+       Serial.println('valeur  0 from get');
+       myservoa.write(0);
+       myservob.write(0);
+      
+    }
+  } 
+ tmpVal = res;
 
  
   Serial.flush();
