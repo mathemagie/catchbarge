@@ -4,7 +4,7 @@
 
 int val;
 
-String tmpVal;
+char tmpVal;
 
 Servo myservoa, myservob;
 
@@ -20,28 +20,34 @@ void setup() {
 
 void loop() {
   HttpClient client;
-  char res;
+  String res;
   char c;
   client.get("http://mathemagie.net/train/xhr/get_aiguillage.php");
 
   while (client.available()) {
      c = client.read();
-    res += c;
+     res += c;
+    
   }
-
-  if (res == '1') {
+  Serial.println(c);
+ 
+  if (c == '1') {
+     Serial.println('valeur  1 from get ');
     myservoa.write(95);
     myservob.write(95);
     
   }
-  if (res == '0') {
+  if (c == '0') {
+     Serial.println('valeur  0 from get');
      myservoa.write(0);
      myservob.write(0);
     
   }
+  
+ // tmpVal = res;
 
  
   Serial.flush();
 
-  delay(10);
+  delay(100);
 }
